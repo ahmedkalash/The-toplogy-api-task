@@ -30,21 +30,21 @@ class Device
     private function fillNetListsIds(array $net_list): void
     {
         foreach ($net_list as $net_list_id){
-            $this->net_lists_ids[]=$net_list_id;
+            $this->net_lists_ids[$net_list_id]=$net_list_id;
         }
     }
 
-    public function getType(): string
+    public function type(): string
     {
         return $this->type;
     }
 
-    public function getId(): string
+    public function id(): string
     {
         return $this->id;
     }
 
-    public function getNetLists(): array
+    public function netLists(): array
     {
         return $this->net_lists;
     }
@@ -61,13 +61,13 @@ class Device
 
     public static function fromArray(array $array): static
     {
-//        // validation is not necessarily as it the data was validated in the file handler
-//        if(!isset(
-//            $array['type'],
-//            $array['id'],
-//        )){
-//            throw new \Exception("Invalid Array");
-//        }
+        // validation is not necessarily as it the data was validated in the file handler
+        if(!isset(
+            $array['type'],
+            $array['id'],
+        )){
+            throw new \Exception("Invalid Array");
+        }
 
         $device = new static(
             $array['type'],
@@ -76,8 +76,13 @@ class Device
             $array ['m(1)']?? [],
             $array ['netlist']?? []
         );
-        $device->fillNetListsIds($device->getNetLists());
+        $device->fillNetListsIds($device->netLists());
         return $device;
+    }
+
+    public function castToArray(): array
+    {
+        return get_object_vars($this);
     }
 
 

@@ -34,7 +34,7 @@ class JsonFileHandler implements FileHandlerInterface
     /**
      * @throws \Exception
      */
-    public function loadFromFile(string $filePath)
+    public function loadFromFile(string $filePath): Topology
     {
         if(file_exists($filePath)){
             $json = file_get_contents($filePath);
@@ -109,7 +109,7 @@ class JsonFileHandler implements FileHandlerInterface
         $devices=[];
         foreach ($topology_array ['components'] as $deviceArray){
             $device = Device::fromArray($deviceArray);
-            $devices[$device->getId()]=$device;
+            $devices[$device->id()]=$device;
         }
 
         unset($topology_array ['components']);
@@ -129,25 +129,28 @@ class JsonFileHandler implements FileHandlerInterface
 
     public function normalizeDeviceForOutPut(Device $device): array
     {
-        $array = get_object_vars($device);
+        $array = $device->castToArray();
 
         unset($array['net_lists_ids']);
+
 
         if(count($array['resistance']) == 0){
             unset($array['resistance']);
         }
         if(count($array['m1']) == 0){
             unset($array['m1']);
-        }
-
-        $netlist = $array['net_lists'];
-        unset( $array['net_lists']);
-        $array['netlist'] = $netlist;
-
-        if(isset($array['m1'])) {
+        }else{
             $m1 = $array['m1'];
             unset($array['m1']);
             $array['m(1)'] = $m1;
+        }
+
+        if(count($array['net_lists']) == 0){
+            unset($array['net_lists']);
+        }else{
+            $netlist = $array['net_lists'];
+            unset( $array['net_lists']);
+            $array['netlist'] = $netlist;
         }
 
 

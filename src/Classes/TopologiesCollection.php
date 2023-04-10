@@ -7,9 +7,7 @@ use Classes\FileHandler\FileHandlerInterface;
 
 class TopologiesCollection
 {
-    /**
-     *@var  array<string,Topology> $Topologies
-     */
+    /**@var  array<string,Topology> $Topologies */
     private array $Topologies;
 
     /***
@@ -17,7 +15,7 @@ class TopologiesCollection
      * @var array<string,Topology> $Topologies
      */
     public function __construct(
-        private FileHandlerInterface $fileHandler,
+        private readonly FileHandlerInterface $fileHandler,
         array $topologies=[],
     ){
         foreach ($topologies as  /** @var Topology $topology */ $topology ){
@@ -45,7 +43,6 @@ class TopologiesCollection
     public function has(string $topology_id): bool
     {
         return isset($this->Topologies[$topology_id]);
-
     }
 
     public function delete(string $topology_id): void

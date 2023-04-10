@@ -15,7 +15,7 @@ class Topology
      */
     public function __construct(
         private string $id,
-        private FileHandlerInterface $fileHandler,
+        private readonly FileHandlerInterface $fileHandler,
         private array $devices=[],
     ){}
     public function id(): string
@@ -32,9 +32,10 @@ class Topology
         $net_list_devices =[];
         foreach ($this->devices as $device){
             if($device->isConnectedTo($net_list_id)){
-                $net_list_devices[]=$device;
+                $net_list_devices[$device->id()]=$device;
             }
         }
+
         return $net_list_devices;
     }
     public function serialize(){
@@ -48,18 +49,14 @@ class Topology
      */
     public static function fromArray(array $topology_array, FileHandlerInterface $fileHandler): static
     {
-//        // validation is not necessarily as it the data was validated in the file handler
-//        if(!isset(
-//            $topology_array['id'],
-//            $topology_array ['components'],
-//        )){
-//            throw new \Exception("Invalid Array");
-//        }
-//        $devices=[];
-//        foreach ($topology_array ['components'] as $deviceArray){
-//            $device = Device::fromArray($deviceArray);
-//            $devices[$device->getId()]=$device;
-//        }
+        // validation is not necessarily as it the data was validated in the file handler
+        if(!isset(
+            $topology_array['id'],
+            $topology_array ['devices'],
+        )){
+            throw new \Exception("Invalid Array");
+        }
+
         return new static(
             $topology_array['id'],
             $fileHandler,

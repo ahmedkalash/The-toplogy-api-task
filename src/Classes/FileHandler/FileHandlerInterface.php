@@ -7,6 +7,6 @@ use Classes\Topology;
 interface FileHandlerInterface
 {
     public function serialize(Topology $topology);
-    public function loadFromFile(string $filePath);
+    public function loadFromFile(string $filePath): Topology;
 
 }
