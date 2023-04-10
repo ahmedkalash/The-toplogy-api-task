@@ -6,5 +6,12 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Classes\\Api\\TheTopologyApi' => $baseDir . '/src/Classes/Api/TheTopologyApi.php',
+    'Classes\\DIContainer\\DIContainer' => $baseDir . '/src/Classes/DIContainer/DIContainer.php',
+    'Classes\\Device' => $baseDir . '/src/Classes/Device.php',
+    'Classes\\FileHandler\\FileHandlerInterface' => $baseDir . '/src/Classes/FileHandler/FileHandlerInterface.php',
+    'Classes\\FileHandler\\JsonFileHandler' => $baseDir . '/src/Classes/FileHandler/JsonFileHandler.php',
+    'Classes\\TopologiesCollection' => $baseDir . '/src/Classes/TopologiesCollection.php',
+    'Classes\\Topology' => $baseDir . '/src/Classes/Topology.php',
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
 );

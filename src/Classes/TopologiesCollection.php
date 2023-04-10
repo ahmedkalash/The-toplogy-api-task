@@ -1,48 +1,67 @@
 <?php
 declare(strict_types=1);
-namespace swt\Classes;
+namespace Classes;
 
-use swt\FileHandler\FileHandlerInterface;
+use Classes\FileHandler\FileHandlerInterface;
 
 
 class TopologiesCollection
 {
-
     /**
      *@var  array<string,Topology> $Topologies
      */
     private array $Topologies;
 
     /***
-     * @var array<string,Topology> $Topologies
      * @param FileHandlerInterface $fileHandler
+     * @var array<string,Topology> $Topologies
      */
     public function __construct(
-        array $topologies,
-        private FileHandlerInterface $fileHandler
-    )
-    {
+        private FileHandlerInterface $fileHandler,
+        array $topologies=[],
+    ){
         foreach ($topologies as  /** @var Topology $topology */ $topology ){
             $this->Topologies[$topology->getId()]= $topology;
         }
     }
-    public function loadFromFile(){
-        $this->fileHandler->loadFromFile();
+
+    /**
+     * @throws \Exception
+     */
+    public function loadFromFile($filePath): Topology
+    {
+        $topology = $this->fileHandler->loadFromFile($filePath);
+        $this->Topologies[$topology->id()]=$topology;
+        return $topology;
     }
-    public function serialize(){
-        $this->fileHandler->serialize();
+
+    /**
+     * @throws \Exception
+     */
+    public function serialize(string $topology_id): void
+    {
+        $this->get($topology_id)->serialize();
     }
-    public function toArrayRecursively(){
+    public function has(string $topology_id): bool
+    {
+        return isset($this->Topologies[$topology_id]);
 
     }
-    public function delete(string $topology_id){
+
+    public function delete(string $topology_id): void
+    {
         unset($this->Topologies[$topology_id]);
     }
-    public function get(string $topology_id){
-        return $this->Topologies[$topology_id];
+    public function get(string $topology_id): ?Topology
+    {
+        return $this->Topologies[$topology_id]?? null;
     }
-    public function netListDevices(string $topology_id,string $net_list_id){
-        return $this->Topologies[$topology_id]->netListDevices($net_list_id);
+    /**
+     * @return array<Device>
+     * */
+    public function netListDevices(string $topology_id,string $net_list_id): array
+    {
+        return $this->get($topology_id)->netListDevices($net_list_id);
     }
 
 
