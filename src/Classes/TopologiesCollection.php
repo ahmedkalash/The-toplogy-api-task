@@ -21,7 +21,7 @@ class TopologiesCollection
         array $topologies=[],
     ){
         foreach ($topologies as  /** @var Topology $topology */ $topology ){
-            $this->Topologies[$topology->getId()]= $topology;
+            $this->Topologies[$topology->id()]= $topology;
         }
     }
 
